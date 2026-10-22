@@ -1,3 +1,5 @@
 <template>
-  tabdeal aparat project
+  <NuxtLayout>
+    <NuxtPage/>
+  </NuxtLayout>
 </template>
