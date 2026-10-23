@@ -9,7 +9,7 @@ export default defineCachedEventHandler(
         if (q.length > 0 && q.length < 3) {
             throw createError({
                 statusCode: 400,
-                statusMessage: 'متن جستجو باید حداقل ۳ حرف باشد',
+                message: 'متن جستجو باید حداقل ۳ حرف باشد',
             })
         }
 

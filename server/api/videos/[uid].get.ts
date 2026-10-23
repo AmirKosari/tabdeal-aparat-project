@@ -2,7 +2,7 @@ export default defineCachedEventHandler(
     async (event) => {
         const uid = getRouterParam(event, 'uid')
         if (!uid) {
-            throw createError({statusCode: 400, statusMessage: 'شناسه ویدیو نامعتبر است'})
+            throw createError({ statusCode: 400, message: 'شناسه ویدیو نامعتبر است' })
         }
         return await fetchVideoByUid(uid)
     },

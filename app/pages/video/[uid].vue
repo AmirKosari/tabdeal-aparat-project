@@ -32,7 +32,7 @@ useSeoMeta({
         class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-8 text-center"
     >
       <p class="mb-4 text-red-300">
-        {{ error.statusMessage || 'ویدیو یافت نشد' }}
+        {{ error.message || 'ویدیو یافت نشد' }}
       </p>
       <div class="flex justify-center gap-3">
         <NuxtLink
@@ -43,7 +43,7 @@ useSeoMeta({
         </NuxtLink>
         <button
             type="button"
-            class="rounded-lg bg-brand-yellow px-4 py-2 text-sm font-semibold text-black"
+            class="rounded-lg bg-brand-yellow px-4 py-2 text-sm font-bold text-black"
             @click="refresh()"
         >
           تلاش مجدد
@@ -53,7 +53,7 @@ useSeoMeta({
 
     <article
         v-else-if="video"
-        class="md:rounded-2xl md:border md:border-white/10 md:p-6"
+        class="flex flex-col md:rounded-2xl md:border md:border-white/10 md:p-6 gap-6 md:gap-8"
     >
       <VideoPlayer
           :frame-url="video.frame"

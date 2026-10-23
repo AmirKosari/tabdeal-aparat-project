@@ -24,7 +24,6 @@ const embedSrc = computed(() => {
         :title="title"
         class="absolute inset-0 h-full w-full border-0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-        allowfullscreen
         loading="lazy"
     />
     <div

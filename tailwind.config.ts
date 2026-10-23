@@ -21,8 +21,9 @@ export default {
                     yellow: '#F5C518',
                     'yellow-hover': '#E0B100',
                 },
-                tag: '#5B9BD5',
-                muted: '#9CA3AF',
+                secondary: '#EAEAEA',
+                tag: '#2EC0FF',
+                muted: '#AEAEAE',
             },
             fontFamily: {
                 sans: ['IRANSans', 'ui-sans-serif', 'system-ui', 'sans-serif'],

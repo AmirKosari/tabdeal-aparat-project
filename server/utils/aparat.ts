@@ -2,34 +2,40 @@ async function aparatFetch<T>(path: string): Promise<T> {
     const base = (useRuntimeConfig().aparatBaseUrl as string).replace(/\/$/, '')
     const url = `${base}/${path.replace(/^\//, '')}`
 
+    let response: Response
     try {
-        const response = await fetch(url, {
+        response = await fetch(url, {
             headers: {
                 Accept: 'application/json',
                 'User-Agent': 'TabdealAparatApp/1.0',
             },
             signal: AbortSignal.timeout(15_000),
         })
-
-        if (!response.ok) {
-            if (response.status === 404) {
-                throw createError({statusCode: 404, statusMessage: 'یافت نشد'})
-            }
-            throw createError({
-                statusCode: 502,
-                statusMessage: `آپارات وضعیت ${response.status} برگرداند`,
-            })
-        }
-
-        return await response.json() as T
     } catch (error: unknown) {
-        if (error && typeof error === 'object' && 'statusCode' in error) {
-            throw error
-        }
         console.error('[aparat]', url, error)
         throw createError({
             statusCode: 502,
-            statusMessage: 'خطا در دریافت اطلاعات از آپارات',
+            message: 'خطا در دریافت اطلاعات از آپارات',
+        })
+    }
+
+    if (!response.ok) {
+        if (response.status === 404) {
+            throw createError({statusCode: 404, message: 'یافت نشد'})
+        }
+        throw createError({
+            statusCode: 502,
+            message: `آپارات وضعیت ${response.status} برگرداند`,
+        })
+    }
+
+    try {
+        return await response.json() as T
+    } catch (error: unknown) {
+        console.error('[aparat]', url, error)
+        throw createError({
+            statusCode: 502,
+            message: 'خطا در دریافت اطلاعات از آپارات',
         })
     }
 }
@@ -69,7 +75,7 @@ export async function fetchChannel(): Promise<ChannelResponse> {
         name: p.name,
         avatar: ensureHttps(p.pic_m || p.pic_b || p.pic_s),
         followerCount: p.follower_cnt,
-        videoCount: Number(String(p.video_cnt).replace(/[^\d]/g, '')) || 0,
+        videoCount: Number(String(p.video_cnt).replace(/\D/g, '')) || 0,
         description: p.descr || '',
     }
 }
@@ -119,7 +125,6 @@ export async function searchChannelVideos(options: {
     const perPage = 9
     const text = options.query.trim()
 
-    // Fetch a larger page from global search, then filter to channel
     const fetchSize = Math.max(perPage * 5, 30)
     const offset = (page - 1) * fetchSize
 
@@ -151,7 +156,7 @@ export async function fetchVideoByUid(uid: string): Promise<VideoDetailDto> {
         `video/videohash/${encodeURIComponent(uid)}`,
     )
     if (!data.video) {
-        throw createError({statusCode: 404, statusMessage: 'ویدیو یافت نشد'})
+        throw createError({statusCode: 404, message: 'ویدیو یافت نشد'})
     }
     return mapVideoDetail(data.video)
 }
