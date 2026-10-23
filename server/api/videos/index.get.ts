@@ -4,7 +4,7 @@ export default defineCachedEventHandler(
         const page = Math.max(1, Number(query.page) || 1)
         const q = typeof query.q === 'string' ? query.q.trim() : ''
 
-        const channel = await fetchChannel()
+        const channel = await getCachedChannel()
 
         if (q.length > 0 && q.length < 3) {
             throw createError({

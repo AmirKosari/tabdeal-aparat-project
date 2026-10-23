@@ -1,7 +1,5 @@
 <script setup lang="ts">
-defineProps<{
-  video: VideoCardDto
-}>()
+defineProps<{ video: VideoCardDto }>()
 </script>
 
 <template>

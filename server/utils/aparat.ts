@@ -74,6 +74,15 @@ export async function fetchChannel(): Promise<ChannelResponse> {
     }
 }
 
+export const getCachedChannel = defineCachedFunction(
+    () => fetchChannel(),
+    {
+        maxAge: 300,
+        name: 'aparat-channel',
+        getKey: () => 'default',
+    },
+)
+
 export async function fetchVideosByUser(options: {
     page?: number
 }): Promise<{ videos: VideoCardDto[], ui: AparatUi, page: number, perPage: number }> {

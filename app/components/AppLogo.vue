@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
       to="/"
-      class="inline-flex h-12 items-center pr-10 transition-opacity hover:opacity-90"
+      class="inline-flex h-12 items-center md:pr-10 transition-opacity hover:opacity-90"
       aria-label="تبدیل"
   >
     <img

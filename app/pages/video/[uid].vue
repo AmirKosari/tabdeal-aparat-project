@@ -16,10 +16,10 @@ useSeoMeta({
 </script>
 
 <template>
-  <main class="mx-auto max-w-5xl px-4 pb-12 md:px-6">
+  <main class="mx-auto w-full max-w-[1920px] px-4 py-6 md:px-[120px] md:py-8">
     <div
         v-if="pending && !video"
-        class="animate-pulse space-y-4 rounded-2xl border border-white/5 bg-surface-card p-4 md:p-6"
+        class="animate-pulse space-y-4 md:rounded-2xl md:border md:border-white/10 md:p-6"
     >
       <div class="aspect-video rounded-xl bg-surface-elevated"/>
       <div class="h-7 w-2/3 rounded bg-surface-elevated"/>
@@ -53,7 +53,7 @@ useSeoMeta({
 
     <article
         v-else-if="video"
-        class="rounded-2xl border border-white/5 bg-surface-card p-3 md:p-6"
+        class="md:rounded-2xl md:border md:border-white/10 md:p-6"
     >
       <VideoPlayer
           :frame-url="video.frame"
