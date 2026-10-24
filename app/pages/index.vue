@@ -23,7 +23,7 @@ const videos = computed(() => {
 const showPagination = computed(() => videos.value.length > 0)
 
 useSeoMeta({
-  title: () => (q.value ? `جستجو: ${q.value} | تبدیل` : 'ویدیوهای آپارات تبدیل'),
+  title: () => (q.value ? ` : ${q.value} | تبدیل جستجو ` : 'ویدیوهای آپارات تبدیل'),
   description: 'فهرست ویدیوهای کانال صرافی تبدیل در آپارات',
 })
 </script>
@@ -34,11 +34,7 @@ useSeoMeta({
         v-if="pending && !videos.length"
         class="grid grid-cols-1 gap-4 py-6 md:grid-cols-2 md:gap-5 lg:grid-cols-3"
     >
-      <div
-          v-for="n in 9"
-          :key="n"
-          class="animate-pulse overflow-hidden rounded-xl bg-surface-card"
-      >
+      <div v-for="n in 9" :key="n" class="animate-pulse overflow-hidden rounded-xl bg-surface-card">
         <div class="aspect-video bg-surface-elevated"/>
         <div class="space-y-3 p-4">
           <div class="h-4 w-3/4 rounded bg-surface-elevated"/>
@@ -49,28 +45,16 @@ useSeoMeta({
     </div>
 
     <template v-else>
-      <p
-          v-if="q"
-          class="mb-4 text-sm text-muted"
-      >
+      <p v-if="q" class="mb-4 text-sm text-muted">
         نتایج جستجو برای «{{ q }}»
       </p>
 
-      <div
-          v-if="videos.length"
-          class="grid grid-cols-1 gap-4 py-2 md:grid-cols-2 md:gap-5 lg:grid-cols-3"
-      >
-        <VideoCard
-            v-for="video in videos"
-            :key="video.uid"
-            :video="video"
-        />
+      <div v-if="videos.length" class="grid grid-cols-1 gap-6 py-2 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <VideoCard v-for="video in videos" :key="video.uid" :video="video"/>
       </div>
 
-      <div
-          v-else
-          class="mt-8 rounded-xl border border-white/10 bg-surface-card px-4 py-4 text-center text-muted md:mt-16 md:py-16"
-      >
+      <div v-else
+           class="mt-8 rounded-xl border border-white/10 bg-surface-card px-4 py-4 text-center text-muted md:mt-16 md:py-16">
         ویدیویی یافت نشد
       </div>
 

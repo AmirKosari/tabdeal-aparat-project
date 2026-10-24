@@ -8,11 +8,6 @@ export function formatDuration(seconds: number | string): string {
     return `${pad(m)}:${pad(s)}`
 }
 
-export function formatViews(count: number | string): string {
-    const n = Number(count) || 0
-    return new Intl.NumberFormat('fa-IR').format(n)
-}
-
 export function formatRelativeTime(
     timediffSeconds?: number | string | null,
     sdateFallback?: string,

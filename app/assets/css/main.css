@@ -4,22 +4,6 @@
 
 @font-face {
     font-family: 'IRANSans';
-    src: url('../fonts/IRANSans/IRANSansWeb_UltraLight.woff2') format('woff2');
-    font-weight: 200;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'IRANSans';
-    src: url('../fonts/IRANSans/IRANSansWeb_Light.woff2') format('woff2');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'IRANSans';
     src: url('../fonts/IRANSans/IRANSansWeb.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
@@ -40,6 +24,15 @@
     font-weight: 700;
     font-style: normal;
     font-display: swap;
+}
+
+@font-face {
+    font-family: 'Rubik';
+    src: url('../fonts/Rubik/Rubik-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0030-0039, U+06F0-06F9, U+0660-0669, U+002E, U+002C, U+003A, U+0025;
 }
 
 @layer base {

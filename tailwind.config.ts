@@ -26,7 +26,8 @@ export default {
                 muted: '#AEAEAE',
             },
             fontFamily: {
-                sans: ['IRANSans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                sans: [ 'IRANSans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                rubik: ['Rubik', 'IRANSans', 'sans-serif'],
             },
             boxShadow: {
                 glow: '0 0 60px 20px rgba(245, 197, 24, 0.12)',
