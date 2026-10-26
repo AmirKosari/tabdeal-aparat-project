@@ -3,14 +3,16 @@ export interface AparatVideoListItem {
     title: string
     username: string
     userid: string
-    visit_cnt: number
+    visit_cnt: string | number
+    visit_cnt_int?: string | number
     uid: string
     process: string
-    sender_name: string
+    sender_name?: string
     big_poster: string
     small_poster: string
+    medium_poster?: string
     profilePhoto: string
-    duration: number
+    duration: string | number
     sdate: string
     create_date?: string
     sdate_timediff?: number
@@ -43,9 +45,24 @@ export interface AparatProfile {
     profile_videos?: string
 }
 
-export interface AparatUi {
-    pagingForward: string | null
-    pagingBack: string | null
+export interface AparatApiIncluded {
+    type: string
+    id: string
+    attributes: AparatVideoListItem & {
+        description?: string
+        tags?: string
+        like_cnt?: string | number
+    }
+}
+
+export interface AparatApiResponse {
+    data?: {
+        type: string
+        id: string
+        attributes?: Record<string, unknown>
+    }[]
+    included?: AparatApiIncluded[]
+    meta?: Record<string, unknown>
 }
 
 export interface ChannelResponse {

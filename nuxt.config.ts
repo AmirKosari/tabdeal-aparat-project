@@ -17,7 +17,8 @@ export default defineNuxtConfig({
         },
     },
     runtimeConfig: {
-        aparatBaseUrl: 'https://www.aparat.com/etc/api',
+        aparatBaseUrl: 'https://aparat.com/etc/api',
+        aparatV1BaseUrl: 'https://aparat.com/api/fa/v1',
     },
     routeRules: {
         '/': {swr: 60},

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-defineProps<{ video: VideoCardDto }>()
+const props = defineProps<{ video: VideoCardDto }>()
+
+const decodedTitle = computed(() => (props.video.title)
+    .replaceAll('&laquo;', '«')
+    .replaceAll('&raquo;', '»')
+)
 </script>
 
 <template>
@@ -15,14 +20,14 @@ defineProps<{ video: VideoCardDto }>()
           loading="lazy"
       >
       <span
-          class="absolute bottom-4 left-4 rounded-[45px] px-[10px] pt-4 pb-3 leading-none bg-[#2F3337] text-[#E3E3E3]">
+          class="absolute bottom-3 md:bottom-4 left-3 md:left-4 rounded-[45px] px-[10px] pt-4 pb-3 leading-none bg-[#2F3337] text-[#E3E3E3]">
         {{ formatDuration(video.duration) }}
       </span>
     </div>
 
     <div class="flex flex-1 flex-col gap-3">
-      <h3 class="line-clamp-2 text-lg font-bold leading-6 text-white md:text-xl">
-        {{ video.title }}
+      <h3 class="line-clamp-1 text-lg font-bold leading-6 text-white md:text-xl">
+        {{ decodedTitle }}
       </h3>
 
       <div class="mt-auto flex items-center gap-2">
@@ -38,7 +43,7 @@ defineProps<{ video: VideoCardDto }>()
       </div>
 
       <p class="text-muted text-sm md:text-base">
-        {{ video.visitCount }} بازدید
+        {{ formatViews(video.visitCount) }} بازدید
         <span class="mx-1">-</span>
         {{ video.relativeTime || video.sdate }}
       </p>

@@ -41,32 +41,19 @@ async function submit() {
       >
       <button
           type="submit"
-          class="flex h-12 w-[97px] shrink-0 items-center justify-center gap-2 rounded bg-[#F0B90B] px-4 py-3 text-[#2A2722] transition-opacity hover:opacity-90"
+          class="flex h-12 w-[97px] shrink-0 items-center justify-center gap-2 rounded bg-brand-yellow px-4 py-3 text-[#2A2722] transition-opacity hover:opacity-90"
       >
-        <span class="text-sm font-medium leading-[22px]">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+              d="M6.70841 12.6876C3.41258 12.6876 0.729248 10.0042 0.729248 6.70841C0.729248 3.41258 3.41258 0.729248 6.70841 0.729248C10.0042 0.729248 12.6876 3.41258 12.6876 6.70841C12.6876 10.0042 10.0042 12.6876 6.70841 12.6876ZM6.70841 1.60425C3.89091 1.60425 1.60425 3.89675 1.60425 6.70841C1.60425 9.52008 3.89091 11.8126 6.70841 11.8126C9.52591 11.8126 11.8126 9.52008 11.8126 6.70841C11.8126 3.89675 9.52591 1.60425 6.70841 1.60425Z"
+              fill="#2A2722"/>
+          <path
+              d="M12.8334 13.2709C12.7226 13.2709 12.6118 13.2301 12.5243 13.1426L11.3576 11.9759C11.1884 11.8068 11.1884 11.5268 11.3576 11.3576C11.5268 11.1884 11.8068 11.1884 11.9759 11.3576L13.1426 12.5243C13.3118 12.6934 13.3118 12.9734 13.1426 13.1426C13.0551 13.2301 12.9443 13.2709 12.8334 13.2709Z"
+              fill="#2A2722"/>
+        </svg>
+        <span class="text-sm font-medium">
           جستجو
         </span>
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 14 14"
-            fill="none"
-            class="h-3.5 w-3.5 shrink-0"
-            aria-hidden="true"
-        >
-          <circle
-              cx="6.2"
-              cy="6.2"
-              r="4.4"
-              stroke="#2A2722"
-              stroke-width="1.3"
-          />
-          <path
-              d="M9.6 9.6L12.4 12.4"
-              stroke="#2A2722"
-              stroke-width="1.3"
-              stroke-linecap="round"
-          />
-        </svg>
       </button>
     </div>
     <p v-if="error" class="mt-2 text-sm text-red-400">

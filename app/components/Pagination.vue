@@ -53,6 +53,11 @@ function pageLink(page: number) {
 
 const canPrev = computed(() => props.hasPrev ?? props.page > 1)
 const canNext = computed(() => props.hasNext ?? props.page < displayTotal.value)
+
+watch(() => props.page, () => {
+  window.scrollTo({top: 0, behavior: 'smooth'})
+})
+
 </script>
 
 <template>
@@ -60,7 +65,7 @@ const canNext = computed(() => props.hasNext ?? props.page < displayTotal.value)
       v-if="displayTotal > 1 || canNext || canPrev"
       dir="ltr"
       style="direction: ltr"
-      class="flex flex-wrap items-center justify-center gap-1 py-6 text-sm text-muted md:gap-2 md:text-base"
+      class="flex flex-wrap items-center justify-center gap-2 py-6 text-sm text-muted md:text-base"
       aria-label="صفحه‌بندی"
   >
     <NuxtLink
@@ -97,7 +102,7 @@ const canNext = computed(() => props.hasNext ?? props.page < displayTotal.value)
           v-else
           :to="pageLink(item)"
           :class="[
-          'flex h-9 w-9 items-center justify-center rounded-full font-medium transition-colors',
+          'flex h-6 w-6 pt-1 items-center justify-center rounded-full font-medium transition-colors',
           item === page
             ? 'bg-brand-yellow text-black'
             : 'hover:text-white',

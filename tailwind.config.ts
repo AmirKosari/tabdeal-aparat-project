@@ -18,8 +18,7 @@ export default {
                     input: '#252525',
                 },
                 brand: {
-                    yellow: '#F5C518',
-                    'yellow-hover': '#E0B100',
+                    yellow: '#F0B90B',
                 },
                 secondary: '#EAEAEA',
                 tag: '#2EC0FF',

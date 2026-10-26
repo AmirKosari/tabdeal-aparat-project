@@ -1,14 +1,21 @@
 <script setup lang="ts">
-defineProps<{
+import {formatViews} from "#shared/utils/format.ts";
+
+const props = defineProps<{
   video: VideoDetailDto
   channel: ChannelResponse | undefined
 }>()
+
+const decodedTitle = computed(() => (props.video.title)
+    .replaceAll('&laquo;', '«')
+    .replaceAll('&raquo;', '»')
+)
 </script>
 
 <template>
   <div class="flex flex-col gap-5">
     <h1 class="flex-1 font-bold text-white text-xl md:text-[32px]">
-      {{ video.title }}
+      {{ decodedTitle }}
     </h1>
 
     <div class="flex flex-col gap-6">
@@ -50,7 +57,7 @@ defineProps<{
 
       <div class="flex flex-col gap-5">
         <div class="flex flex-wrap items-center gap-x-2 text-sm text-muted">
-          <span>{{ video.visitCount }} بازدید</span>
+          <span>{{ formatViews(video.visitCount) }} بازدید</span>
           <span aria-hidden="true">·</span>
           <span>{{ video.relativeTime || video.sdate }}</span>
           <span aria-hidden="true">·</span>

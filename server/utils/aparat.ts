@@ -1,7 +1,8 @@
-async function aparatFetch<T>(path: string): Promise<T> {
-    const base = (useRuntimeConfig().aparatBaseUrl as string).replace(/\/$/, '')
-    const url = `${base}/${path.replace(/^\//, '')}`
+function buildUrl(base: string, path: string): string {
+    return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
+}
 
+async function aparatRequest<T>(url: string): Promise<T> {
     let response: Response
     try {
         response = await fetch(url, {
@@ -40,6 +41,22 @@ async function aparatFetch<T>(path: string): Promise<T> {
     }
 }
 
+function aparatFetch<T>(path: string): Promise<T> {
+    const base = useRuntimeConfig().aparatBaseUrl as string
+    return aparatRequest<T>(buildUrl(base, path))
+}
+
+function aparatFetchV1<T>(path: string): Promise<T> {
+    const base = useRuntimeConfig().aparatV1BaseUrl as string
+    return aparatRequest<T>(buildUrl(base, path))
+}
+
+function extractVideos(response: AparatApiResponse): AparatVideoListItem[] {
+    return (response.included || [])
+        .filter(item => item.type === 'Video')
+        .map(item => item.attributes)
+}
+
 function mapVideoCard(item: AparatVideoListItem): VideoCardDto {
     return {
         uid: item.uid,
@@ -49,7 +66,7 @@ function mapVideoCard(item: AparatVideoListItem): VideoCardDto {
         poster: ensureHttps(item.big_poster || item.small_poster),
         profilePhoto: ensureHttps(item.profilePhoto),
         duration: Number(item.duration) || 0,
-        visitCount: Number(item.visit_cnt) || 0,
+        visitCount: Number(item.visit_cnt_int ?? item.visit_cnt) || 0,
         sdate: item.sdate,
         relativeTime: formatRelativeTime(item.sdate_timediff, item.sdate),
     }
@@ -89,66 +106,68 @@ export const getCachedChannel = defineCachedFunction(
     },
 )
 
+async function fetchUserVideosRaw(): Promise<AparatVideoListItem[]> {
+    const data = await aparatFetchV1<AparatApiResponse>(
+        'user/video/list/username/tabdealplatform',
+    )
+    return extractVideos(data)
+}
+
+const getCachedUserVideos = defineCachedFunction(
+    () => fetchUserVideosRaw(),
+    {
+        maxAge: 300,
+        name: 'aparat-user-videos',
+        getKey: () => 'default',
+    },
+)
+
+async function fetchSearchVideosRaw(text: string): Promise<AparatVideoListItem[]> {
+    const data = await aparatFetchV1<AparatApiResponse>(
+        `video/video/search/text/${encodeURIComponent(text)}/?channel=tabdealplatform`,
+    )
+    return extractVideos(data)
+        .filter(v => v.username?.toLowerCase() === 'tabdealplatform')
+}
+
+const getCachedSearchVideos = defineCachedFunction(
+    (text: string) => fetchSearchVideosRaw(text),
+    {
+        maxAge: 300,
+        name: 'aparat-search-videos',
+        getKey: (text: string) => encodeURIComponent(text),
+    },
+)
+
+function paginate(
+    items: AparatVideoListItem[],
+    page: number,
+): { videos: VideoCardDto[], page: number, perPage: number, total: number } {
+    const start = (page - 1) * 9
+    return {
+        videos: items.slice(start, start + 9).map(mapVideoCard),
+        page,
+        perPage: 9,
+        total: items.length,
+    }
+}
+
 export async function fetchVideosByUser(options: {
     page?: number
-}): Promise<{ videos: VideoCardDto[], ui: AparatUi, page: number, perPage: number }> {
+}): Promise<{ videos: VideoCardDto[], page: number, perPage: number, total: number }> {
     const page = Math.max(1, options.page || 1)
-    const perPage = 9
-    const offset = (page - 1) * perPage
-
-    let path = `videoByUser/username/tabdealplatform/perpage/${perPage}`
-    if (offset > 0) {
-        path += `/curoffset/${offset}`
-    }
-
-    const data = await aparatFetch<{
-        videobyuser?: AparatVideoListItem[]
-        videoByUser?: AparatVideoListItem[]
-        ui?: AparatUi
-    }>(path)
-
-    const list = data.videobyuser || data.videoByUser || []
-
-    return {
-        videos: list.map(mapVideoCard),
-        ui: data.ui || {pagingForward: null, pagingBack: null},
-        page,
-        perPage,
-    }
+    const all = await getCachedUserVideos()
+    return paginate(all, page)
 }
 
 export async function searchChannelVideos(options: {
     query: string
     page?: number
-}): Promise<{ videos: VideoCardDto[], ui: AparatUi, page: number, perPage: number }> {
+}): Promise<{ videos: VideoCardDto[], page: number, perPage: number, total: number }> {
     const page = Math.max(1, options.page || 1)
-    const perPage = 9
     const text = options.query.trim()
-
-    const fetchSize = Math.max(perPage * 5, 30)
-    const offset = (page - 1) * fetchSize
-
-    let path = `videoBySearch/text/${encodeURIComponent(text)}/perpage/${fetchSize}`
-    if (offset > 0) {
-        path += `/curoffset/${offset}`
-    }
-
-    const data = await aparatFetch<{
-        videobysearch: AparatVideoListItem[]
-        ui: AparatUi
-    }>(path)
-
-    const filtered = (data.videobysearch || [])
-        .filter(v => v.username?.toLowerCase() === 'tabdealplatform')
-        .map(mapVideoCard)
-        .slice(0, perPage)
-
-    return {
-        videos: filtered,
-        ui: data.ui || {pagingForward: null, pagingBack: null},
-        page,
-        perPage,
-    }
+    const all = await getCachedSearchVideos(text)
+    return paginate(all, page)
 }
 
 export async function fetchVideoByUid(uid: string): Promise<VideoDetailDto> {

@@ -29,7 +29,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <main class="mx-auto max-w-6xl px-4 pb-10 md:px-6">
+  <main class="pt-8 md:pt-16 px-4 md:px-[120px]">
     <div
         v-if="pending && !videos.length"
         class="grid grid-cols-1 gap-4 py-6 md:grid-cols-2 md:gap-5 lg:grid-cols-3"
@@ -49,7 +49,7 @@ useSeoMeta({
         نتایج جستجو برای «{{ q }}»
       </p>
 
-      <div v-if="videos.length" class="grid grid-cols-1 gap-6 py-2 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+      <div v-if="videos.length" class="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
         <VideoCard v-for="video in videos" :key="video.uid" :video="video"/>
       </div>
 
