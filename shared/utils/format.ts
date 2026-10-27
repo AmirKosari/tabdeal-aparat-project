@@ -30,23 +30,19 @@ export function formatRelativeTime(
     const year = 365 * day
 
     if (diff < minute) return 'لحظاتی پیش'
-    if (diff < hour) {
+    else if (diff < hour) {
         const m = Math.floor(diff / minute)
         return `${m} دقیقه پیش`
-    }
-    if (diff < day) {
+    } else if (diff < day) {
         const h = Math.floor(diff / hour)
         return `${h} ساعت پیش`
-    }
-    if (diff < week) {
+    } else if (diff < week) {
         const d = Math.floor(diff / day)
         return `${d} روز پیش`
-    }
-    if (diff < month) {
+    } else if (diff < month) {
         const w = Math.floor(diff / week)
         return `${w} هفته پیش`
-    }
-    if (diff < year) {
+    } else if (diff < year) {
         const mo = Math.floor(diff / month)
         return `${mo} ماه پیش`
     }
@@ -59,10 +55,7 @@ export function parseTags(tagStr: string | null | undefined, tags: string[] | nu
         return tags.map(t => String(t).replace(/^#/, '').trim()).filter(Boolean)
     }
     if (!tagStr) return []
-    return tagStr
-        .split(/[,،\-]/)
-        .map(t => t.trim().replace(/^#/, ''))
-        .filter(Boolean)
+    return tagStr.split(/[,،\-]/).map(t => t.trim().replace(/^#/, '')).filter(Boolean)
 }
 
 export function ensureHttps(url: string | null | undefined): string {

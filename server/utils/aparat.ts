@@ -1,3 +1,5 @@
+import {AparatApiResponse} from "#shared/types/aparat.ts";
+
 function buildUrl(base: string, path: string): string {
     return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
 }
@@ -52,9 +54,7 @@ function aparatFetchV1<T>(path: string): Promise<T> {
 }
 
 function extractVideos(response: AparatApiResponse): AparatVideoListItem[] {
-    return (response.included || [])
-        .filter(item => item.type === 'Video')
-        .map(item => item.attributes)
+    return (response.included || []).filter(item => item.type === 'Video').map(item => item.attributes)
 }
 
 function mapVideoCard(item: AparatVideoListItem): VideoCardDto {
@@ -126,8 +126,7 @@ async function fetchSearchVideosRaw(text: string): Promise<AparatVideoListItem[]
     const data = await aparatFetchV1<AparatApiResponse>(
         `video/video/search/text/${encodeURIComponent(text)}/?channel=tabdealplatform`,
     )
-    return extractVideos(data)
-        .filter(v => v.username?.toLowerCase() === 'tabdealplatform')
+    return extractVideos(data).filter(v => v.username?.toLowerCase() === 'tabdealplatform')
 }
 
 const getCachedSearchVideos = defineCachedFunction(
@@ -139,10 +138,12 @@ const getCachedSearchVideos = defineCachedFunction(
     },
 )
 
-function paginate(
-    items: AparatVideoListItem[],
+function paginate(items: AparatVideoListItem[], page: number): {
+    videos: VideoCardDto[],
     page: number,
-): { videos: VideoCardDto[], page: number, perPage: number, total: number } {
+    perPage: number,
+    total: number
+} {
     const start = (page - 1) * 9
     return {
         videos: items.slice(start, start + 9).map(mapVideoCard),
@@ -152,18 +153,23 @@ function paginate(
     }
 }
 
-export async function fetchVideosByUser(options: {
-    page?: number
-}): Promise<{ videos: VideoCardDto[], page: number, perPage: number, total: number }> {
+export async function fetchVideosByUser(options: { page?: number }): Promise<{
+    videos: VideoCardDto[],
+    page: number,
+    perPage: number,
+    total: number
+}> {
     const page = Math.max(1, options.page || 1)
     const all = await getCachedUserVideos()
     return paginate(all, page)
 }
 
-export async function searchChannelVideos(options: {
-    query: string
-    page?: number
-}): Promise<{ videos: VideoCardDto[], page: number, perPage: number, total: number }> {
+export async function searchChannelVideos(options: { query: string, page?: number }): Promise<{
+    videos: VideoCardDto[],
+    page: number,
+    perPage: number,
+    total: number
+}> {
     const page = Math.max(1, options.page || 1)
     const text = options.query.trim()
     const all = await getCachedSearchVideos(text)
