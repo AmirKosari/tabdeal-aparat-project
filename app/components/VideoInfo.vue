@@ -68,7 +68,7 @@ const decodedTitle = computed(() => (props.video.title)
           </template>
         </div>
 
-        <p v-if="video.description" class="whitespace-pre-line text-[#E2E2E2] leading-7 ">
+        <p v-if="video.description" class="whitespace-pre-line break-words text-[#E2E2E2] leading-7">
           {{ video.description }}
         </p>
       </div>
